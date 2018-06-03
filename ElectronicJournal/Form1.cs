@@ -55,6 +55,15 @@ namespace ElectronicJournal
             sqlConnection.Close();
             LoadGroups();
         }
+        private void DeleteGroup(string idGroup)
+        {
+            sqlConnection.Open();
+            SQLiteCommand command = new SQLiteCommand("DELETE FROM Groups WHERE id=@id", sqlConnection);
+            command.Parameters.AddWithValue("id", idGroup);
+            command.ExecuteNonQuery();
+            sqlConnection.Close();
+            LoadGroups();
+        }
 
 
         //Subject
@@ -93,6 +102,15 @@ namespace ElectronicJournal
             sqlConnection.Close();
             LoadSubject();
         }
+        private void DeleteSubject(string id)
+        {
+            sqlConnection.Open();
+            SQLiteCommand command = new SQLiteCommand("DELETE FROM Subjects WHERE id=@id", sqlConnection);
+            command.Parameters.AddWithValue("id", id);
+            command.ExecuteNonQuery();
+            sqlConnection.Close();
+            LoadSubject();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrWhiteSpace(textBox1.Text))
@@ -110,7 +128,15 @@ namespace ElectronicJournal
             LoadGroups();
             LoadSubject();
         }
-
+        private void DeleteStudent(string idStud)
+        {
+            sqlConnection.Open();
+            SQLiteCommand command = new SQLiteCommand("DELETE FROM Students WHERE id=@id", sqlConnection);
+            command.Parameters.AddWithValue("id", idStud);
+            command.ExecuteNonQuery();
+            sqlConnection.Close();
+            comboBoxGroupsForStud_SelectedIndexChanged(comboBoxGroupsForStud, null);
+        }
         private void buttonAddStudent_Click(object sender, EventArgs e)
         {
             var group = comboBoxGroupsForStud.SelectedItem as Group;
@@ -445,6 +471,43 @@ namespace ElectronicJournal
         private void bunifuImageButton1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonDeleteGroup_Click(object sender, EventArgs e)
+        {
+            if (listBoxGroup.SelectedIndex >= 0)
+            {
+                DeleteGroup((listBoxGroup.SelectedItem as Group).id);
+            }
+            else
+            {
+                MessageBox.Show("Оберіть группу", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonDeleteStudent_Click(object sender, EventArgs e)
+        {
+
+            if (listBoxStudents.SelectedIndex >= 0)
+            {
+                DeleteStudent((listBoxStudents.SelectedItem as Students).id);
+            }
+            else
+            {
+                MessageBox.Show("Оберіть студента", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonDeleteSubject_Click(object sender, EventArgs e)
+        {
+            if (listBoxSubjects.SelectedIndex >= 0)
+            {
+                DeleteSubject((listBoxSubjects.SelectedItem as Subject).id);
+            }
+            else
+            {
+                MessageBox.Show("Оберіть предмет", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
